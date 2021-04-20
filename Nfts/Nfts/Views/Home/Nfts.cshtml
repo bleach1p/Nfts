@@ -1,0 +1,41 @@
+﻿@model Models.Nfts.RetornoNfts
+
+@{
+    ViewData["Title"] = "Itens";
+}
+
+<h1>View</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Conta
+            </th>
+            <th>
+                Nome
+            </th>
+            <th>Raridade</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.InfosGerais)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Conta)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item.Name)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item.Rarity)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
