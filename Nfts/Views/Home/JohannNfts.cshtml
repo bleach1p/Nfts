@@ -1,0 +1,229 @@
+﻿@model Models.Nfts.RetornoNfts
+
+@{
+    ViewData["Title"] = "Itens";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Dono da conta
+            </th>
+            <th>
+                Conta
+            </th>
+            <th>
+                Nome
+            </th>
+            <th>
+                Raridade
+            </th>
+            <th>
+                Shine
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.InfosGerais.Where(x => x.DonoConta == "Johann").ToList())
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DonoConta)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Conta)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item.Rarity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item.Shine)
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Conta
+            </th>
+            <th>
+                Cota memória
+            </th>
+            <th>
+                Memória Utilizada
+            </th>
+            <th>
+                Memória %
+            </th>
+            <th>
+                Net usada
+            </th>
+            <th>
+                Net disponivel
+            </th>
+            <th>
+                Net Max
+            </th>
+            <th>Net %</th>
+            <th>
+                Cpu usada
+            </th>
+            <th>
+                Cpu disponivel
+            </th>
+            <th>
+                Cpu Max
+            </th>
+            <th>
+                Cpu %
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var contasJohann = Model.InfosGerais.Where(x => x.DonoConta == "Johann").ToList().Select(x => x.Conta).Distinct();
+        }
+
+        @foreach (var contaJohann in contasJohann)
+        {
+
+            var contentAtual = Model.InfosGerais.Where(x => x.Conta == contaJohann).FirstOrDefault();
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => contaJohann)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => contentAtual.AccountContent.RamCota)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => contentAtual.AccountContent.RamUtilizada)
+                </td>
+                <td class="porcentagemRam">
+                    @{var ram = (contentAtual.AccountContent.RamUtilizada / contentAtual.AccountContent.RamCota) * 100;
+                        var ramFormatted = ram.ToString("#.##");
+                    }
+
+                    @Html.DisplayFor(modelItem => ramFormatted)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => contentAtual.AccountContent.Net.Used)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => contentAtual.AccountContent.Net.Available)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => contentAtual.AccountContent.Net.Max)
+                </td>
+                <td class="porcentagemNet">
+                    @{var net = (contentAtual.AccountContent.Net.Used / contentAtual.AccountContent.Net.Max) * 100;
+                        var netFormatted = net.ToString("#.##");
+                    }
+                    @Html.DisplayFor(modelItem => netFormatted)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => contentAtual.AccountContent.Cpu.Used)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => contentAtual.AccountContent.Cpu.Available)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => contentAtual.AccountContent.Cpu.Max)
+                </td>
+                <td class="porcentagemCpu">
+                    @{var cpu = (contentAtual.AccountContent.Cpu.Used / contentAtual.AccountContent.Cpu.Max) * 100;
+                        var cpuFormatted = cpu.ToString("#.##");
+                    }
+                    @Html.DisplayFor(modelItem => cpuFormatted)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $(".porcentagemCpu").each(index => {
+        var porcentagem = $(".porcentagemCpu")[index].innerText
+        console.log(porcentagem);
+        if (porcentagem.replace(",", ".") <= 40) {
+            $(".porcentagemCpu")[index].setAttribute("style", "background-color:blue; color:white;");
+        };
+    })
+
+    $(".porcentagemCpu").each(index => {
+        var porcentagem = $(".porcentagemCpu")[index].innerText
+        console.log(porcentagem);
+        if (porcentagem.replace(",", ".") > 40 && porcentagem.replace(",", ".") <= 70) {
+            $(".porcentagemCpu")[index].setAttribute("style", "background-color:green; color:white;");
+        };
+    })
+
+    $(".porcentagemCpu").each(index => {
+        var porcentagem = $(".porcentagemCpu")[index].innerText
+        console.log(porcentagem);
+        if (porcentagem.replace(",", ".") > 70) {
+            $(".porcentagemCpu")[index].setAttribute("style", "background-color:red; color:white;");
+        };
+    })
+
+    $(".porcentagemRam").each(index => {
+        var porcentagem = $(".porcentagemRam")[index].innerText
+        console.log(porcentagem);
+        if (porcentagem.replace(",", ".") <= 40) {
+            $(".porcentagemRam")[index].setAttribute("style", "background-color:blue; color:white;");
+        };
+    })
+
+    $(".porcentagemRam").each(index => {
+        var porcentagem = $(".porcentagemRam")[index].innerText
+        console.log(porcentagem);
+        if (porcentagem.replace(",", ".") > 40 && porcentagem.replace(",", ".") <= 70) {
+            $(".porcentagemRam")[index].setAttribute("style", "background-color:green; color:white;");
+        };
+    })
+
+    $(".porcentagemRam").each(index => {
+        var porcentagem = $(".porcentagemRam")[index].innerText
+        console.log(porcentagem);
+        if (porcentagem.replace(",", ".") > 70) {
+            $(".porcentagemRam")[index].setAttribute("style", "background-color:red; color:white;");
+        };
+    })
+
+    $(".porcentagemNet").each(index => {
+        var porcentagem = $(".porcentagemNet")[index].innerText
+        console.log(porcentagem);
+        if (porcentagem.replace(",", ".") <= 40) {
+            $(".porcentagemNet")[index].setAttribute("style", "background-color:blue; color:white;");
+        };
+    })
+
+    $(".porcentagemNet").each(index => {
+        var porcentagem = $(".porcentagemNet")[index].innerText
+        console.log(porcentagem);
+        if (porcentagem.replace(",", ".") > 40 && porcentagem.replace(",", ".") <= 70) {
+            $(".porcentagemNetsssss")[index].setAttribute("style", "background-color:green; color:white;");
+        };
+    })
+
+    $(".porcentagemNet").each(index => {
+        var porcentagem = $(".porcentagemNet")[index].innerText
+        console.log(porcentagem);
+        if (porcentagem.replace(",", ".") > 70) {
+            $(".porcentagemNet")[index].setAttribute("style", "background-color:red; color:white;");
+        };
+    })
+</script>
+
